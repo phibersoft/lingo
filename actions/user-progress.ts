@@ -25,10 +25,6 @@ export const upsertUserProgress = async (courseId: number) => {
       userName: user.fullName || "Anonymous",
       userImageSrc: user.imageUrl || "/mascot.svg",
     });
-
-    revalidatePath("/courses");
-    revalidatePath("/learn");
-    redirect("/learn");
   } else {
     await db.insert(userProgress).values({
       userId,
@@ -37,4 +33,8 @@ export const upsertUserProgress = async (courseId: number) => {
       userImageSrc: user.imageUrl || "/mascot.svg",
     });
   }
+
+  revalidatePath("/courses");
+  revalidatePath("/learn");
+  redirect("/learn");
 };
