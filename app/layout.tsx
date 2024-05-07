@@ -4,6 +4,7 @@ import "./globals.css";
 import { FC, ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { ExitModal } from "@/components/modals/exit-modal";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
       <html lang="en">
         <body className={font.className}>
           <Toaster />
+          <ExitModal />
           {children}
         </body>
       </html>
