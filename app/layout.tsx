@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import { FC, ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -19,7 +20,10 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={font.className}>{children}</body>
+        <body className={font.className}>
+          <Toaster />
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
