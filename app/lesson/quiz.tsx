@@ -8,11 +8,12 @@ import dynamic from "next/dynamic";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
-import { useAudio } from "react-use";
+import { useAudio, useMount } from "react-use";
 import Image from "next/image";
 import { ResultCard } from "@/app/lesson/result-card";
 import { useRouter } from "next/navigation";
 import { useHeartsModal } from "@/store/use-hearts-modal";
+import { usePracticeModal } from "@/store/use-practice-modal";
 
 const Challenge = dynamic(
   () => import("./challenge").then((mod) => mod.Challenge),
@@ -44,6 +45,11 @@ export const Quiz: FC<QuizProps> = ({
   userSubscription,
 }) => {
   const { open: openHeartsModal } = useHeartsModal();
+  const { open: openPracticeModal } = usePracticeModal();
+
+  useMount(() => {
+    if (initialPercentage === 100) openPracticeModal();
+  });
 
   const router = useRouter();
   const [correctAudio, _c, correctControls] = useAudio({ src: "/correct.wav" });
@@ -59,7 +65,9 @@ export const Quiz: FC<QuizProps> = ({
 
   const [lessonId] = useState(initialLessonId);
   const [hearts, setHearts] = useState(initialHearts);
-  const [percentage, setPercentage] = useState(initialPercentage);
+  const [percentage, setPercentage] = useState(() => {
+    return initialPercentage === 100 ? 0 : initialPercentage;
+  });
   const [challenges, setChallenges] = useState(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState(() => {
     const uncompletedIndex = challenges.findIndex(
@@ -109,6 +117,10 @@ export const Quiz: FC<QuizProps> = ({
             correctControls.play();
 
             setStatus("correct");
+            setPercentage((prev) => {
+              const newPercentage = prev + 100 / challenges.length;
+              return Math.min(newPercentage, 100);
+            });
 
             // This is a practice
             if (initialPercentage === 100) {
