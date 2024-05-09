@@ -13,6 +13,7 @@ This is a clone of the popular language learning app Duolingo. It is a web appli
 <img src="/docs/6.png" height="200" />
 <img src="/docs/7.png" height="200" />
 </div>
+
 ## Features
 - User authentication
 - Leaderboard
