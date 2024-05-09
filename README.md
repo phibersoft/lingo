@@ -4,6 +4,7 @@ This is a clone of the popular language learning app Duolingo. It is a web appli
 > It's a tutorial project for exploring Clerk, ShadCDN, Drizzle, and Neon Database.
 
 ## Screenshots
+<div style="display:flex;gap:5px;">
 <img src="/docs/1.png" height="200" />
 <img src="/docs/2.png" height="200" />
 <img src="/docs/3.png" height="200" />
@@ -11,7 +12,7 @@ This is a clone of the popular language learning app Duolingo. It is a web appli
 <img src="/docs/5.png" height="200" />
 <img src="/docs/6.png" height="200" />
 <img src="/docs/7.png" height="200" />
-
+</div>
 ## Features
 - User authentication
 - Leaderboard
