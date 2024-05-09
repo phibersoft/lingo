@@ -227,3 +227,19 @@ export const getUserSubscription = cache(async () => {
     isActive: !!isActive,
   };
 });
+
+export const getTopUsers = cache(async (limit = 10) => {
+  const { userId } = auth();
+  if (!userId) return [];
+
+  return db.query.userProgress.findMany({
+    orderBy: (userProgress, { desc }) => [desc(userProgress.points)],
+    limit,
+    columns: {
+      userId: true,
+      userName: true,
+      points: true,
+      userImageSrc: true,
+    },
+  });
+});
