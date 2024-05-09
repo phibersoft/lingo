@@ -1,11 +1,15 @@
 import { NextPage } from "next";
+import { redirect } from "next/navigation";
+import Image from "next/image";
+
+import { Promo } from "@/components/promo";
 import { StickyWrapper } from "@/components/sticky-wrapper";
 import { UserProgress } from "@/components/user-progress";
-import { getUserProgress, getUserSubscription } from "@/db/queries";
-import { redirect } from "next/navigation";
 import { FeedWrapper } from "@/components/feed-wrapper";
-import Image from "next/image";
-import { Items } from "@/app/(main)/shop/items";
+
+import { getUserProgress, getUserSubscription } from "@/db/queries";
+import { Items } from "./items";
+import {Quests} from "@/components/quests";
 
 const ShopPage: NextPage = async () => {
   const userProgressData = getUserProgress();
@@ -29,6 +33,8 @@ const ShopPage: NextPage = async () => {
           points={userProgress.points}
           hasActiveSubscription={isPro}
         />
+        {!isPro && <Promo />}
+        <Quests points={userProgress.points} />
       </StickyWrapper>
       <FeedWrapper>
         <div className={"w-full flex flex-col items-center"}>
