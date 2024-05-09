@@ -8,6 +8,7 @@ import {
   lessons,
   units,
   userProgress,
+  userSubscription,
 } from "@/db/schema";
 
 export const getCourses = cache(async () => {
@@ -193,4 +194,25 @@ export const getLessonPercentage = cache(async () => {
   return Math.round(
     (completedChallenges.length / lesson.challenges.length) * 100,
   );
+});
+
+export const getUserSubscription = cache(async () => {
+  const { userId } = auth();
+
+  if (!userId) return null;
+
+  const data = await db.query.userSubscription.findFirst({
+    where: eq(userSubscription.userId, userId),
+  });
+
+  if (!data) return null;
+
+  const isActive =
+    data.stripePriceId &&
+    data.stripeCurrentPeriodEnd?.getTime()! + 8_640_000 > Date.now();
+
+  return {
+    ...data,
+    isActive: !!isActive,
+  };
 });
