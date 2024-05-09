@@ -1,17 +1,25 @@
 "use client";
 
-import { challengeOptions, challenges } from "@/db/schema";
 import { FC, useMemo, useState, useTransition } from "react";
+import { useAudio, useMount } from "react-use";
+
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import dynamic from "next/dynamic";
+
+import { toast } from "sonner";
+import { POINT_PER_CHALLENGE } from "@/constants";
+
+import { getUserSubscription } from "@/db/queries";
+import { challengeOptions, challenges } from "@/db/schema";
+
 import { Header } from "./header";
 import { QuestionBubble } from "./question-bubble";
-import dynamic from "next/dynamic";
+import { ResultCard } from "./result-card";
+
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
-import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
-import { useAudio, useMount } from "react-use";
-import Image from "next/image";
-import { ResultCard } from "@/app/lesson/result-card";
-import { useRouter } from "next/navigation";
+
 import { useHeartsModal } from "@/store/use-hearts-modal";
 import { usePracticeModal } from "@/store/use-practice-modal";
 
@@ -34,7 +42,7 @@ type QuizProps = {
       challengeOptions: Array<typeof challengeOptions.$inferSelect>;
     }
   >;
-  userSubscription: any; // TODO: Define this type
+  userSubscription: Awaited<ReturnType<typeof getUserSubscription>>;
 };
 
 export const Quiz: FC<QuizProps> = ({
@@ -190,7 +198,10 @@ export const Quiz: FC<QuizProps> = ({
             Great job! <br /> You&apos;ve completed this lesson.
           </h1>
           <div className={"flex items-center gap-x-4 w-full"}>
-            <ResultCard variant={"points"} value={challenges.length * 10} />
+            <ResultCard
+              variant={"points"}
+              value={challenges.length * POINT_PER_CHALLENGE}
+            />
             <ResultCard variant={"hearts"} value={hearts} />
           </div>
         </div>
