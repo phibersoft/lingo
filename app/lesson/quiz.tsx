@@ -12,6 +12,7 @@ import { useAudio } from "react-use";
 import Image from "next/image";
 import { ResultCard } from "@/app/lesson/result-card";
 import { useRouter } from "next/navigation";
+import { useHeartsModal } from "@/store/use-hearts-modal";
 
 const Challenge = dynamic(
   () => import("./challenge").then((mod) => mod.Challenge),
@@ -42,6 +43,8 @@ export const Quiz: FC<QuizProps> = ({
   initialLessonChallenges,
   userSubscription,
 }) => {
+  const { open: openHeartsModal } = useHeartsModal();
+
   const router = useRouter();
   const [correctAudio, _c, correctControls] = useAudio({ src: "/correct.wav" });
   const [incorrectAudio, _ic, incorrectControls] = useAudio({
@@ -99,7 +102,7 @@ export const Quiz: FC<QuizProps> = ({
         upsertChallengeProgress(challenge.id)
           .then((response) => {
             if (response?.error === "hearts") {
-              console.error("Not enough hearts!");
+              openHeartsModal();
               return;
             }
 
@@ -122,7 +125,7 @@ export const Quiz: FC<QuizProps> = ({
         reduceHearts(challenge.id)
           .then((response) => {
             if (response?.error === "hearts") {
-              console.error("Not enough hearts!");
+              openHeartsModal();
               return;
             }
 
